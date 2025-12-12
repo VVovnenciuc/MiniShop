@@ -1,0 +1,17 @@
+YAMLreplicaCount: 2
+
+image:
+  repository: yourname/user-service        # schimbă cu ECR mai târziu
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 3000
+
+env:
+  NODE_ENV: production
+  JWT_SECRET: super-secret-jwt-key-2025
+
+database:
+  url: postgresql://minishop_user:StrongPass123@minishop-db:5432/usersdb?schema=public
