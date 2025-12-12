@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: user-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: usersdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  user-service:
+    build: .
+    container_name: user-service
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/usersdb?schema=public
+      - JWT_SECRET=super-secret-jwt-key-2025
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    command: >
+      sh -c "npx prisma migrate deploy &&
+             npx prisma db seed &&
+             node src/server.js"
+
+volumes:
+  postgres_data:
