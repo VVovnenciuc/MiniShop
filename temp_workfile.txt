@@ -1,0 +1,22 @@
+USER SERVICE Test rapid local (fără Docker) – în 30 de secunde
+Bashcd user-service
+
+# 1. Copiază exemplul
+cp .env.example .env
+
+# 2. Instalează
+npm install
+
+# 3. Generează clientul Prisma
+npx prisma generate
+
+# 4. Creează baza + migrații (prima dată)
+npx prisma migrate dev --name init
+
+# 5. Rulează seed-ul (creează userul admin@minishop.com / admin123)
+node prisma/seed.js
+
+# 6. Pornește serviciul
+npm run dev
+La http://localhost:3000/health trebuie să vezi:
+JSON{ "status": "ok", "service": "user-service", "db": "PostgreSQL" }
