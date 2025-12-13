@@ -61,4 +61,19 @@ MiniShop/
 │           │   ├── secret.yaml
 │           │   └── _helpers.tpl
 │           └── .helmignore
-
+├── product-service/
+│   ├── src/
+│   │   ├── routes/product.routes.js
+│   │   ├── controllers/product.controller.js
+│   │   ├── middleware/auth.middleware.js   ← copiat din user-service
+│   │   └── server.js
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   └── seed.js
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   ├── helm/
+│   │   └── product-service/                ← chart identic ca structură
+│   ├── .env.example
+│   ├── package.json
+│   └── tests/ (opțional)
