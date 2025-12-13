@@ -77,3 +77,19 @@ MiniShop/
 │   ├── .env.example
 │   ├── package.json
 │   └── tests/ (opțional)
+├── order-service/
+│   ├── src/
+│   │   ├── routes/order.routes.js
+│   │   ├── controllers/order.controller.js
+│   │   ├── middleware/auth.middleware.js
+│   │   ├── services/productClient.js     ← client HTTP către product-service
+│   │   ├── services/userClient.js        ← client HTTP către user-service
+│   │   └── server.js
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   └── seed.js
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   ├── helm/order-service/
+│   ├── package.json
+│   └── .env.example
