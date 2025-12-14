@@ -93,3 +93,28 @@ MiniShop/
 │   ├── helm/order-service/
 │   ├── package.json
 │   └── .env.example
+├── payment-service/
+│   ├── src/
+│   │   ├── routes/payment.routes.js
+│   │   ├── controllers/payment.controller.js
+│   │   ├── middleware/auth.middleware.js  ← copiat din celelalte
+│   │   ├── services/orderClient.js        ← client HTTP către order-service
+│   │   ├── services/userClient.js         ← client HTTP către user-service
+│   │   └── server.js
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   └── seed.js
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   ├── helm/
+│   │   └── payment-service/
+│   ├── package.json
+│   └── .env.example
+
+
+
+
+
+
+
+
