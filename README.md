@@ -30,89 +30,83 @@ Bashhelm upgrade --install user-service ./user-service/helm/user-service \
   --set image.tag=latest \
   --set database.url="postgresql://postgres:password@host.minikube.internal:5432/usersdb"
 
-helm/
-├── minishop-chart/            ← umbrella chart
-│   └── charts/
-│       ├── user-service/
-│       ├── product-service/
-│       ├── order-service/
-│       └── payment-service/
-└── user-service/              ← chart separat (pentru dezvoltare individuală)
-
 MiniShop/
+├── README.md                              ← Documentație completă + diagrame + demo
+├── Makefile                               ← Comenzi rapide (make up, make nuke etc.)
+├── docker-compose.yml                     ← Global: ridică toate 4 servicii + 4 DB-uri local
+├── .gitignore
+├── .github/
+│   └── workflows/                         ← Opțional GitHub Actions fallback
+│
+├── jenkins/
+│   └── Jenkinsfile                        ← Pipeline CI/CD complet (build, test, push ECR, deploy Helm)
+│
+├── terraform/
+│   ├── main.tf                            ← Provider + modules call
+│   ├── variables.tf
+│   ├── outputs.tf
+│   ├── terraform.tfvars.example
+│   ├── modules/
+│   │   ├── vpc/                           ← VPC, subnets, NAT etc.
+│   │   ├── eks/                           ← EKS cluster + node groups
+│   │   ├── rds/                           ← 4 RDS instances (sau 1 multi-DB)
+│   │   ├── ecr/                           ← Repositories pentru imagini
+│   │   └── iam/                           ← Roles pentru Jenkins/ECR
+│   └── backend.tf                         ← S3 backend pentru tfstate
+│
+├── helm/
+│   └── minishop/                          ← Umbrella chart
+│       ├── Chart.yaml
+│       ├── values.yaml                    ← Valori globale + override-uri
+│       ├── templates/
+│       │   ├── ingress.yaml
+│       │   └── NOTES.txt
+│       └── charts/                        ← Subcharts (copiate din servicii)
+│           ├── user-service/
+│           │   ├── Chart.yaml
+│           │   ├── values.yaml
+│           │   └── templates/
+│           │       ├── deployment.yaml
+│           │       ├── service.yaml
+│           │       ├── secret.yaml
+│           │       ├── migration-job.yaml
+│           │       └── seed-job.yaml
+│           ├── product-service/
+│           ├── order-service/
+│           └── payment-service/
+│
 ├── user-service/
-│   ├── src/                  ← codul din mesajele anterioare
-│   ├── prisma/
-│   │   ├── schema.prisma
-│   │   ├── migrations/
-│   │   └── seed.js
-│   ├── Dockerfile            ← final, explicat mai jos
-│   ├── docker-compose.yml    ← doar pentru local / demo
-│   ├── .env.example
-│   ├── .dockerignore
+│   ├── src/                               ← Cod Node.js (server.js, routes, controllers etc.)
+│   ├── prisma/                            ← schema.prisma, migrations, seed.js
+│   ├── Dockerfile
+│   ├── docker-compose.yml                 ← Individual pentru test rapid
 │   ├── package.json
-│   └── helm/
-│       └── user-service/     ← Helm chart complet
-│           ├── Chart.yaml
-│           ├── values.yaml
-│           ├── templates/
-│           │   ├── deployment.yaml
-│           │   ├── service.yaml
-│           │   ├── secret.yaml
-│           │   └── _helpers.tpl
-│           └── .helmignore
+│   ├── .env.example
+│   └── helm/user-service/                 ← Chart individual (copiat în umbrella)
+│
 ├── product-service/
 │   ├── src/
-│   │   ├── routes/product.routes.js
-│   │   ├── controllers/product.controller.js
-│   │   ├── middleware/auth.middleware.js   ← copiat din user-service
-│   │   └── server.js
 │   ├── prisma/
-│   │   ├── schema.prisma
-│   │   └── seed.js
 │   ├── Dockerfile
 │   ├── docker-compose.yml
-│   ├── helm/
-│   │   └── product-service/                ← chart identic ca structură
-│   ├── .env.example
 │   ├── package.json
-│   └── tests/ (opțional)
+│   └── helm/product-service/
+│
 ├── order-service/
-│   ├── src/
-│   │   ├── routes/order.routes.js
-│   │   ├── controllers/order.controller.js
-│   │   ├── middleware/auth.middleware.js
-│   │   ├── services/productClient.js     ← client HTTP către product-service
-│   │   ├── services/userClient.js        ← client HTTP către user-service
-│   │   └── server.js
+│   ├── src/                               ← include services/productClient.js, userClient.js
 │   ├── prisma/
-│   │   ├── schema.prisma
-│   │   └── seed.js
 │   ├── Dockerfile
 │   ├── docker-compose.yml
-│   ├── helm/order-service/
 │   ├── package.json
-│   └── .env.example
-├── payment-service/
-│   ├── src/
-│   │   ├── routes/payment.routes.js
-│   │   ├── controllers/payment.controller.js
-│   │   ├── middleware/auth.middleware.js  ← copiat din celelalte
-│   │   ├── services/orderClient.js        ← client HTTP către order-service
-│   │   ├── services/userClient.js         ← client HTTP către user-service
-│   │   └── server.js
-│   ├── prisma/
-│   │   ├── schema.prisma
-│   │   └── seed.js
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   ├── helm/
-│   │   └── payment-service/
-│   ├── package.json
-│   └── .env.example
-
-
-
+│   └── helm/order-service/
+│
+└── payment-service/
+    ├── src/                               ← include services/orderClient.js, userClient.js
+    ├── prisma/
+    ├── Dockerfile
+    ├── docker-compose.yml
+    ├── package.json
+    └── helm/payment-service/
 
 
 
