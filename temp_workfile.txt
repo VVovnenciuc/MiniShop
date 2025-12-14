@@ -1,3 +1,35 @@
+Cum instalezi totul pe Kubernetes (Minikube / EKS / Kind)
+
+Pornește clusterul (ex: Minikube)
+
+minikube start
+minikube addons enable ingress
+
+Actualizează dependencies
+
+cd helm/minishop
+helm dependency update
+
+Instalează totul cu un singur comand
+
+helm upgrade --install minishop . \
+  --set global.image.tag=latest \
+  --set global.image.repositoryPrefix=yourname/ \
+  --create-namespace --namespace minishop
+
+Adaugă în /etc/hosts pentru test local
+
+echo "$(minikube ip) minishop.local" | sudo tee -a /etc/hosts
+
+Testează
+
+curl http://minishop.local/api/users/health
+curl http://minishop.local/api/products
+
+
+
+
+
 USER SERVICE Test rapid local (fără Docker) – în 30 de secunde
 Bashcd user-service
 

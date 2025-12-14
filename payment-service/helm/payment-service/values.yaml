@@ -1,0 +1,23 @@
+replicaCount: 2
+
+image:
+  repository: yourname/payment-service      # schimbă cu ECR repo mai târziu
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 80                                  # port extern în cluster (Ingress va ruta aici)
+
+containerPort: 3003                         # portul real al aplicației Node.js
+
+env:
+  NODE_ENV: production
+
+jwtSecret: super-secret-jwt-key-2025
+
+database:
+  url: postgresql://minishop_user:StrongPass123@minishop-db:5432/paymentsdb?schema=public
+
+userServiceUrl: http://user-service
+orderServiceUrl: http://order-service

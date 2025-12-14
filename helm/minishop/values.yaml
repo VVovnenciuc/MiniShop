@@ -1,0 +1,33 @@
+# Valori globale – poți suprascrie per serviciu dacă vrei
+global:
+  image:
+    tag: "latest"
+    repositoryPrefix: yourname/  # ex: 123456789.dkr.ecr.region.amazonaws.com/
+
+  jwtSecret: super-secret-jwt-key-2025
+
+  database:
+    user: minishop_user
+    password: StrongPass123
+    host: minishop-db  # în K8s va fi external RDS sau internal
+
+# Suprascrieri specifice (exemplu – poți adăuga mai multe)
+user-service:
+  database:
+    url: postgresql://{{ .Values.global.database.user }}:{{ .Values.global.database.password }}@{{ .Values.global.database.host }}:5432/usersdb?schema=public
+
+product-service:
+  database:
+    url: postgresql://{{ .Values.global.database.user }}:{{ .Values.global.database.password }}@{{ .Values.global.database.host }}:5432/productsdb?schema=public
+
+order-service:
+  database:
+    url: postgresql://{{ .Values.global.database.user }}:{{ .Values.global.database.password }}@{{ .Values.global.database.host }}:5432/ordersdb?schema=public
+  userServiceUrl: http://user-service
+  productServiceUrl: http://product-service
+
+payment-service:
+  database:
+    url: postgresql://{{ .Values.global.database.user }}:{{ .Values.global.database.password }}@{{ .Values.global.database.host }}:5432/paymentsdb?schema=public
+  userServiceUrl: http://user-service
+  orderServiceUrl: http://order-service

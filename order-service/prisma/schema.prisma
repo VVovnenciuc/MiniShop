@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Order {
+  id          Int           @id @default(autoincrement())
+  userId      Int
+  status      String        @default("pending") // pending, processed, cancelled
+  totalPrice  Float
+  items       OrderItem[]
+  createdAt   DateTime      @default(now())
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Float   // prețul la momentul comenzii
+
+  order     Order   @relation(fields: [orderId], references: [id])
+
+  @@map("order_items")
+}

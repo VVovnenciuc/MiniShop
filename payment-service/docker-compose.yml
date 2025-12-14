@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: paymentsdb
+    ports:
+      - "5436:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  payment-service:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/paymentsdb?schema=public
+      JWT_SECRET: super-secret-jwt-key-2025
+      USER_SERVICE_URL: http://user-service:80
+      ORDER_SERVICE_URL: http://order-service:80
+    ports:
+      - "3003:3003"
+    depends_on:
+      - postgres
+    command: >
+      sh -c "npx prisma migrate deploy &&
+             npx prisma db seed &&
+             node src/server.js"
+
+volumes:
+  pg_data:

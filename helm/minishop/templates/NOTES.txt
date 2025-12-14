@@ -1,0 +1,12 @@
+MiniShop deployed successfully!
+
+Access APIs at:
+  - Users:     http://minishop.local/api/users
+  - Products:  http://minishop.local/api/products
+  - Orders:    http://minishop.local/api/orders
+  - Payments:  http://minishop.local/api/payments
+
+Add to /etc/hosts for local testing:
+  127.0.0.1 minishop.local
+
+Run `helm upgrade` to update.

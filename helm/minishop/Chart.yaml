@@ -1,0 +1,20 @@
+apiVersion: v2
+name: minishop
+description: MiniShop - Microservices E-Commerce Demo with 4 services
+type: application
+version: 0.1.0
+appVersion: "1.0"
+
+dependencies:
+  - name: user-service
+    version: 0.1.0
+    repository: "file://charts/user-service"
+  - name: product-service
+    version: 0.1.0
+    repository: "file://charts/product-service"
+  - name: order-service
+    version: 0.1.0
+    repository: "file://charts/order-service"
+  - name: payment-service
+    version: 0.1.0
+    repository: "file://charts/payment-service"
